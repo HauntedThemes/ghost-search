@@ -1,0 +1,41 @@
+{
+  "name": "ghost-search",
+  "version": "0.1.0",
+  "description": "A simple but powerful search library for Ghost Blogging Platform.",
+  "main": "ghost-search.js",
+  "scripts": {
+    "dev": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HauntedThemes/ghost-search.git"
+  },
+  "keywords": [
+    "ghost",
+    "search"
+  ],
+  "author": {
+    "name": "Haunted Themes",
+    "email": "contact@hauntedthemes.com",
+    "url": "https://www.hauntedthemes.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HauntedThemes/ghost-search/issues"
+  },
+  "homepage": "https://github.com/HauntedThemes/ghost-search",
+  "dependencies": {
+    "fuzzysort": "^1.1.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-header-comment": "^0.4.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-resolve-dependencies": "^2.2.0",
+    "gulp-sourcemaps": "^2.6.4"
+  }
+}
