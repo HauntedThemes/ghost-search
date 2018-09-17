@@ -44,6 +44,12 @@ Add the following js code after you included `ghost-search.min.js`:
 <script src="https://cdn.jsdelivr.net/npm/ghost-search@0.1.0/dist/ghost-search.min.js"></script>
 ```
 
+## npm
+
+```
+npm install ghost-search
+```
+
 ## Live Examples
 
 [Set a basic search](https://www.hauntedthemes.com/ghost-search-our-first-open-source-library-for-ghost/#set-a-basic-search) \
