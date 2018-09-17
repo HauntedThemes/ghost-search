@@ -1,3 +1,7 @@
+[![Dependency Status](https://david-dm.org/HauntedThemes/ghost-search/status.svg)](https://david-dm.org/HauntedThemes/ghost-search)
+[![devDependency Status](https://david-dm.org/HauntedThemes/ghost-search/dev-status.svg)](https://david-dm.org/HauntedThemes/ghost-search?type=dev)
+[![npm version](https://badge.fury.io/js/ghost-search.svg)](https://www.npmjs.com/package/ghost-search)
+
 # ghost-search
 
 A simple but powerful search library for [Ghost Blogging Platform](https://ghost.org/).
@@ -21,7 +25,7 @@ Add the following code, in a `.hbs` file, where you want to show the search inpu
 
 Add the following code, in a `.hbs` file, where you want to show the search results:
 
-```
+```html
 <div id="ghost-search-results"></div>
 ```
 
@@ -32,6 +36,12 @@ Add the following js code after you included `ghost-search.min.js`:
 <script type="text/javascript">
     let ghostSearch = new GhostSearch()
 </script>
+```
+
+## Use ghost-search from CDN
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/ghost-search@0.1.0/dist/ghost-search.min.js"></script>
 ```
 
 ## Live Examples
@@ -397,5 +407,5 @@ Thank you [farzher](https://github.com/farzher/) for creating fuzzysort, a simpl
 
 ## Copyright & License
 
-Copyright (c) 2018 Haunted Themes - Released under the [MIT license](LICENSE).
+Copyright (c) 2018 Haunted Themes - Released under the [MIT license](LICENSE). \
 [Ghost is a trademark of The Ghost Foundation](https://ghost.org/)
