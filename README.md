@@ -373,7 +373,7 @@ let ghostSearch = new GhostSearch({
 
 This parameter has 4 methods in it: `beforeDisplay`, `afterDisplay`, `beforeFetch`, `afterFetch`. \
 `afterDisplay` and `afterFetch` have a parameter `results` that contains the results fetched. \
-They are usefull to do things before results are visible to users.
+They are useful to do things before results are visible to users.
 
 Example:
 
