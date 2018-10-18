@@ -2,7 +2,7 @@
   "name": "ghost-search",
   "version": "0.1.0",
   "description": "A simple but powerful search library for Ghost Blogging Platform.",
-  "main": "ghost-search.js",
+  "main": "dist/ghost-search.js",
   "scripts": {
     "dev": "gulp"
   },
