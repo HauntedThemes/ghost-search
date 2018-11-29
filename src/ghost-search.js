@@ -14,6 +14,7 @@ class GhostSearch {
             results: '#ghost-search-results',
             button: '',
             development: false,
+            defaultValue: '',
             template: function(result) {
                 let url = [location.protocol, '//', location.host].join('');
                 return '<a href="' + url + '/' + result.slug + '/">' + result.title + '</a>';  
@@ -110,6 +111,9 @@ class GhostSearch {
         };
 
         let inputValue = document.querySelectorAll(this.input)[0].value;
+        if(this.defaultValue != ''){
+            inputValue = this.defaultValue;
+        }
         const results = fuzzysort.go(inputValue, data, {
             keys: this.options.keys,
             limit: this.options.limit,
@@ -123,6 +127,7 @@ class GhostSearch {
         }
 
         this.on.afterDisplay(results)
+        this.defaultValue = '';
 
     }
 
@@ -132,6 +137,11 @@ class GhostSearch {
 
         this.on.afterFetch(data);
         this.check = true;
+
+        if(this.defaultValue != ''){
+            this.on.beforeDisplay()
+            this.displayResults(data)
+        }
 
         if (this.button != '') {
             let button = document.querySelectorAll(this.button)[0];
@@ -239,6 +249,15 @@ class GhostSearch {
 
         if (!this.validate()) {
             return;
+        }
+
+        if(this.defaultValue != ''){
+            document.querySelectorAll(this.input)[0].value = this.defaultValue;
+            window.onload = () => {
+                if (!this.check) {
+                    this.fetch()
+                };
+            }
         }
 
         if (this.trigger == 'focus') {

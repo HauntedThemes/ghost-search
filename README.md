@@ -72,6 +72,7 @@ npm install ghost-search
     results: '#ghost-search-results',
     button: '',
     development: false,
+    defaultValue: '',
     template: function(result) {
         let url = [location.protocol, '//', location.host].join('');
         return '<a href="' + url + '/' + result.slug + '/">' + result.title + '</a>';  
@@ -185,6 +186,20 @@ By default it is set to `false` but you can set it like this to `true`:
 ```
 
 Default value: `false`
+
+### defaultValue
+
+A parameter that will set a default value for the input and performs the search.
+
+```html
+<script type="text/javascript">
+    let ghostSearch = new GhostSearch({
+        defaultValue: 'ghost'
+    })
+</script>
+```
+
+Default value: `''`
 
 ### template
 
@@ -397,12 +412,15 @@ let ghostSearch = new GhostSearch({
 All changes should be committed to `src/` files only.
 
 ## Known Issues
-* DDOS effect when `trigger` is set to `load`
+* DDOS effect when `trigger` is set to `load`.
 If you have a lot of posts and set `trigger` to `load` you might get a DDOS effect because you are loading all the post everything a page loads. It would be better to just set `trigger` to `focus`.
 * [Avoid using `fields` if you are filtering on a relationship](https://github.com/TryGhost/Ghost/issues/8649).
 If you include `tags` or `authors`, the library removes everything you have in `fields` parameter.
 
 ## Changelog
+
+### 0.1.1 - 29 Nov 2018
+* Added `defaultValue` parameter.
 
 ### 0.1.0 - 17 Sep 2018
 * Initial release

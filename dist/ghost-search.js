@@ -1,9 +1,9 @@
 /**
- * ghost-search 0.1.0 (https://github.com/HauntedThemes/ghost-search)
+ * ghost-search 0.1.1 (https://github.com/HauntedThemes/ghost-search)
  * A simple but powerful search library for Ghost Blogging Platform.
  * Copyright 2018 Haunted Themes (https://www.hauntedthemes.com)
  * Released under MIT License
- * Released on: 17 Sep 2018
+ * Released on: 29 Nov 2018
  */
 
 /*
@@ -638,6 +638,7 @@ function () {
       results: '#ghost-search-results',
       button: '',
       development: false,
+      defaultValue: '',
       template: function template(result) {
         var url = [location.protocol, '//', location.host].join('');
         return '<a href="' + url + '/' + result.slug + '/">' + result.title + '</a>';
@@ -750,6 +751,11 @@ function () {
 
       ;
       var inputValue = document.querySelectorAll(this.input)[0].value;
+
+      if (this.defaultValue != '') {
+        inputValue = this.defaultValue;
+      }
+
       var results = fuzzysort.go(inputValue, data, {
         keys: this.options.keys,
         limit: this.options.limit,
@@ -766,6 +772,7 @@ function () {
       }
 
       this.on.afterDisplay(results);
+      this.defaultValue = '';
     }
   }, {
     key: "search",
@@ -775,6 +782,11 @@ function () {
       var data = resource[this.api.resource];
       this.on.afterFetch(data);
       this.check = true;
+
+      if (this.defaultValue != '') {
+        this.on.beforeDisplay();
+        this.displayResults(data);
+      }
 
       if (this.button != '') {
         var button = document.querySelectorAll(this.button)[0];
@@ -908,6 +920,18 @@ function () {
 
       if (!this.validate()) {
         return;
+      }
+
+      if (this.defaultValue != '') {
+        document.querySelectorAll(this.input)[0].value = this.defaultValue;
+
+        window.onload = function () {
+          if (!_this5.check) {
+            _this5.fetch();
+          }
+
+          ;
+        };
       }
 
       if (this.trigger == 'focus') {
