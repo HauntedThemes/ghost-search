@@ -41,7 +41,7 @@ Add the following js code after you included `ghost-search.min.js`:
 ## Use ghost-search from CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ghost-search@0.1.0/dist/ghost-search.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ghost-search@0.1.1/dist/ghost-search.min.js"></script>
 ```
 
 ## npm
