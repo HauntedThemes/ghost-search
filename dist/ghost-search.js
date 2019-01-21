@@ -1,9 +1,9 @@
 /**
- * ghost-search 0.1.1 (https://github.com/HauntedThemes/ghost-search)
+ * ghost-search 1.0.0 (https://github.com/HauntedThemes/ghost-search)
  * A simple but powerful search library for Ghost Blogging Platform.
- * Copyright 2018 Haunted Themes (https://www.hauntedthemes.com)
+ * Copyright 2019 Haunted Themes (https://www.hauntedthemes.com)
  * Released under MIT License
- * Released on: 29 Nov 2018
+ * Released on: 21 Jan 2019
  */
 
 /*
@@ -634,10 +634,12 @@ function () {
 
     this.check = false;
     var defaults = {
+      host: '',
+      key: '',
+      version: 'v2',
       input: '#ghost-search-field',
       results: '#ghost-search-results',
       button: '',
-      development: false,
       defaultValue: '',
       template: function template(result) {
         var url = [location.protocol, '//', location.host].join('');
@@ -658,7 +660,8 @@ function () {
           filter: '',
           include: '',
           order: '',
-          formats: ''
+          formats: '',
+          page: ''
         }
       },
       on: {
@@ -693,52 +696,38 @@ function () {
       return target;
     }
   }, {
-    key: "url",
-    value: function url() {
-      if (this.api.resource == 'posts' && this.api.parameters.include.match(/(tags|authors)/)) {
-        delete this.api.parameters.fields;
-      }
-
-      ;
-      var url = ghost.url.api(this.api.resource, this.api.parameters);
-      return url;
-    }
-  }, {
     key: "fetch",
-    value: function (_fetch) {
-      function fetch() {
-        return _fetch.apply(this, arguments);
-      }
-
-      fetch.toString = function () {
-        return _fetch.toString();
-      };
-
-      return fetch;
-    }(function () {
+    value: function fetch() {
       var _this2 = this;
 
-      var url = this.url();
       this.on.beforeFetch();
-      fetch(url).then(function (response) {
-        return response.json();
-      }).then(function (resource) {
-        return _this2.search(resource);
-      }).catch(function (error) {
-        return console.error("Fetch Error =\n", error);
+      var ghostAPI = new GhostContentAPI({
+        host: this.host,
+        key: this.key,
+        version: this.version
       });
-    })
+      var browse = {};
+      var parameters = this.api.parameters;
+
+      for (var key in parameters) {
+        if (parameters[key] != '') {
+          browse[key] = parameters[key];
+        }
+      }
+
+      browse.limit = 'all';
+      ghostAPI[this.api.resource].browse(browse).then(function (data) {
+        _this2.search(data);
+      }).catch(function (err) {
+        console.error(err);
+      });
+    }
   }, {
     key: "createElementFromHTML",
     value: function createElementFromHTML(htmlString) {
       var div = document.createElement('div');
       div.innerHTML = htmlString.trim();
       return div.firstChild;
-    }
-  }, {
-    key: "cleanup",
-    value: function cleanup(input) {
-      return input.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-");
     }
   }, {
     key: "displayResults",
@@ -776,10 +765,9 @@ function () {
     }
   }, {
     key: "search",
-    value: function search(resource) {
+    value: function search(data) {
       var _this3 = this;
 
-      var data = resource[this.api.resource];
       this.on.afterFetch(data);
       this.check = true;
 
@@ -816,19 +804,8 @@ function () {
       ;
     }
   }, {
-    key: "checkGhostAPI",
-    value: function checkGhostAPI() {
-      if (typeof ghost === 'undefined') {
-        console.log('Ghost API is not enabled');
-        return false;
-      }
-
-      ;
-      return true;
-    }
-  }, {
-    key: "checkElements",
-    value: function checkElements() {
+    key: "checkArgs",
+    value: function checkArgs() {
       if (!document.querySelectorAll(this.input).length) {
         console.log('Input not found.');
         return false;
@@ -850,64 +827,26 @@ function () {
         ;
       }
 
-      return true;
-    }
-  }, {
-    key: "checkFields",
-    value: function checkFields() {
-      var validFields = [];
-
-      if (this.api.resource == 'posts') {
-        validFields = ['amp', 'authors', 'codeinjection_foot', 'codeinjection_head', 'comment_id', 'created_at', 'created_by', 'custom_excerpt', 'custom_template', 'feature_image', 'featured', 'html', 'id', 'locale', 'meta_description', 'meta_title', 'mobiledoc', 'og_description', 'og_image', 'og_title', 'page', 'plaintext', 'primary_author', 'primary_tag', 'published_at', 'published_by', 'slug', 'status', 'tags', 'title', 'twitter_description', 'twitter_image', 'twitter_title', 'updated_at', 'updated_by', 'url', 'uuid', 'visibility'];
-      } else if (this.api.resource == 'tags') {
-        validFields = ['count', 'created_at', 'created_by', 'description', 'feature_image', 'id', 'meta_description', 'meta_title', 'name', 'parent', 'slug', 'updated_at', 'updated_by', 'visibility'];
-      } else if (this.api.resource == 'users') {
-        validFields = ['accessibility', 'bio', 'count', 'cover_image', 'facebook', 'id', 'locale', 'location', 'meta_description', 'meta_title', 'name', 'profile_image', 'slug', 'tour', 'twitter', 'visibility', 'website'];
-      }
-
-      for (var i = 0; i < this.api.parameters.fields.length; i++) {
-        if (!validFields.includes(this.api.parameters.fields[i])) {
-          console.log('\'' + this.api.parameters.fields[i] + '\' is not a valid field for ' + this.api.resource + '. Valid fields for ' + this.api.resource + ': [\'' + validFields.join('\', \'') + '\']');
-        }
-      }
-    }
-  }, {
-    key: "checkFormats",
-    value: function checkFormats() {
-      if (this.api.resource == 'posts' && this.api.parameters.fields && _typeof(this.api.parameters.fields) === 'object' && this.api.parameters.fields.constructor === Array) {
-        for (var i = 0; i < this.api.parameters.fields.length; i++) {
-          if (!this.api.parameters.formats.includes(this.api.parameters.fields[i]) && this.api.parameters.fields[i].match(/(plaintext|mobiledoc|amp)/) || this.api.parameters.fields[i] == 'html' && this.api.parameters.formats.length > 0 && !this.api.parameters.formats.includes('html')) {
-            console.log(this.api.parameters.fields[i] + ' is not included in the formats parameter.');
-          }
-        }
-      }
-    }
-  }, {
-    key: "checkKeys",
-    value: function checkKeys() {
-      var _this4 = this;
-
-      if (!this.options.keys.every(function (elem) {
-        return _this4.api.parameters.fields.indexOf(elem) > -1;
-      })) {
-        console.log('Not all keys are in fields. Please add them.');
-      }
-
-      ;
-    }
-  }, {
-    key: "validate",
-    value: function validate() {
-      if (!this.checkGhostAPI() || !this.checkElements()) {
+      if (this.host == '') {
+        console.log('Content API Client Library host missing. Please set the host. Must not end in a trailing slash.');
         return false;
       }
 
       ;
 
-      if (this.development) {
-        this.checkFields();
-        this.checkFormats();
-        this.checkKeys();
+      if (this.key == '') {
+        console.log('Content API Client Library key missing. Please set the key. Hex string copied from the "Integrations" screen in Ghost Admin.');
+        return false;
+      }
+
+      ;
+      return true;
+    }
+  }, {
+    key: "validate",
+    value: function validate() {
+      if (!this.checkArgs()) {
+        return false;
       }
 
       ;
@@ -916,7 +855,7 @@ function () {
   }, {
     key: "init",
     value: function init() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (!this.validate()) {
         return;
@@ -926,8 +865,8 @@ function () {
         document.querySelectorAll(this.input)[0].value = this.defaultValue;
 
         window.onload = function () {
-          if (!_this5.check) {
-            _this5.fetch();
+          if (!_this4.check) {
+            _this4.fetch();
           }
 
           ;
@@ -936,16 +875,16 @@ function () {
 
       if (this.trigger == 'focus') {
         document.querySelectorAll(this.input)[0].addEventListener('focus', function (e) {
-          if (!_this5.check) {
-            _this5.fetch();
+          if (!_this4.check) {
+            _this4.fetch();
           }
 
           ;
         });
       } else if (this.trigger == 'load') {
         window.onload = function () {
-          if (!_this5.check) {
-            _this5.fetch();
+          if (!_this4.check) {
+            _this4.fetch();
           }
 
           ;

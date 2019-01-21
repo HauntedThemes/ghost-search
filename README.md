@@ -8,11 +8,19 @@ A simple but powerful search library for [Ghost Blogging Platform](https://ghost
 
 ## Setup
 
+### Step 1 - Setup Content API Client Library
+
+Get the [latest version](https://unpkg.com/@tryghost/content-api) of Ghost Content API Client Library from unpkg.com. 
+
+Add the script before the `{{ghost_foot}}` tag. This will, most likely, be in `default.hbs`.
+
+### Step 2 - Setup ghost-search
+
 Open your theme directory and navigate to `assets` subdirectory. \
 Create a directory called `js`, if there isn't already one in there, and add the minified version of `ghost-search` in it. \
 Open `default.hbs` that is located at the root of your theme. \
 At the bottom of this file you should see `{{ghost_foot}}`. \
-Add the following code above it and save it:
+Add the following code above it (after the content-api script at Step 1) and save it:
 ```
 <script type="text/javascript" src="{{asset "js/ghost-search.min.js"}}"></script>
 ```
@@ -34,14 +42,25 @@ Add the following js code after you included `ghost-search.min.js`:
 
 ```html
 <script type="text/javascript">
-    let ghostSearch = new GhostSearch()
+    let ghostSearch = new GhostSearch({
+        key: '22444f78447824223cefc48062', // This is just a demo key. Replace the key with a real one. See Step 3.
+        host: 'https://demo.ghost.io', // This is just a demo host. Replace the host with a real one. See Step 3.
+    })
 </script>
 ```
+
+### Step 3 - Setup a Custom integration
+
+Go in your Ghost's dashboard -> Integrations -> Add custom integration \
+Set a name: Haunted Themes Search \
+Get the Content API Key and replace the demo key with this one. [More details](https://docs.ghost.org/api/content/#host). \
+Get the admin domain. This will be different in some cases. [More details](https://docs.ghost.org/api/content/#key).
+
 
 ## Use ghost-search from CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ghost-search@0.1.1/dist/ghost-search.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ghost-search@1.0.0/dist/ghost-search.min.js"></script>
 ```
 
 ## npm
@@ -68,6 +87,9 @@ npm install ghost-search
 
 ```
 {
+    host: '',
+    key: '',
+    version: 'v2',
     input: '#ghost-search-field',
     results: '#ghost-search-results',
     button: '',
@@ -107,6 +129,20 @@ npm install ghost-search
 ```
 
 ## Options
+
+### host
+
+The host that needs to be set in order for Content API to properly authenticate. [More details](https://docs.ghost.org/api/content/#host).
+
+### key
+
+The key that needs to be set in order for Content API to properly authenticate. [More details](https://docs.ghost.org/api/content/#key).
+
+### version
+
+The version that needs to be set in order for Content API to properly authenticate. [More details](https://docs.ghost.org/api/content/#path--version).
+
+Default value: `'v2'`
 
 ### input
 
@@ -171,21 +207,6 @@ To make this work you need to add the input and the button in a `form` element:
 ```
 
 Default value: `''`
-
-### development
-
-A parameter that will do some validation to your current instance. Might be useful if you use the `api` parameter. \
-By default it is set to `false` but you can set it like this to `true`:
-
-```html
-<script type="text/javascript">
-    let ghostSearch = new GhostSearch({
-        development: true
-    })
-</script>
-```
-
-Default value: `false`
 
 ### defaultValue
 
@@ -397,7 +418,7 @@ let ghostSearch = new GhostSearch({
     on: {
         beforeFetch: function(){
             // Create a div that has a spinning icon
-            console.log('Loading appers');
+            console.log('Loading appears');
         },
         afterFetch: function(results){
             // Remove the spinning icon
@@ -414,10 +435,11 @@ All changes should be committed to `src/` files only.
 ## Known Issues
 * DDOS effect when `trigger` is set to `load`.
 If you have a lot of posts and set `trigger` to `load` you might get a DDOS effect because you are loading all the post everything a page loads. It would be better to just set `trigger` to `focus`.
-* [Avoid using `fields` if you are filtering on a relationship](https://github.com/TryGhost/Ghost/issues/8649).
-If you include `tags` or `authors`, the library removes everything you have in `fields` parameter.
 
 ## Changelog
+
+### 1.0.0 - 21 Jan 2019
+* Public API (deprecated) will not work anymore. The library is accessing Content API.
 
 ### 0.1.1 - 29 Nov 2018
 * Added `defaultValue` parameter.
@@ -431,5 +453,5 @@ Thank you [farzher](https://github.com/farzher/) for creating fuzzysort, a simpl
 
 ## Copyright & License
 
-Copyright (c) 2018 Haunted Themes - Released under the [MIT license](LICENSE). \
+Copyright (c) 2019 Haunted Themes - Released under the [MIT license](LICENSE). \
 [Ghost is a trademark of The Ghost Foundation](https://ghost.org/)

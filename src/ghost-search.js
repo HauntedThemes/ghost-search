@@ -10,10 +10,12 @@ class GhostSearch {
         this.check = false;
 
         const defaults = {
+            host: '',
+            key: '',
+            version: 'v2',
             input: '#ghost-search-field',
             results: '#ghost-search-results',
             button: '',
-            development: false,
             defaultValue: '',
             template: function(result) {
                 let url = [location.protocol, '//', location.host].join('');
@@ -37,6 +39,7 @@ class GhostSearch {
                     include: '',
                     order: '',
                     formats: '',
+                    page: ''
                 },
             },
             on: {
@@ -67,39 +70,41 @@ class GhostSearch {
         return target;
     }
 
-    url(){
-
-        if (this.api.resource == 'posts' && this.api.parameters.include.match( /(tags|authors)/ )) {
-            delete this.api.parameters.fields;
-        };
-
-        let url = ghost.url.api(this.api.resource, this.api.parameters);
-
-        return url;
-
-    }
-
     fetch(){
-
-        let url = this.url();
 
         this.on.beforeFetch();
 
-        fetch(url)
-        .then(response => response.json())
-        .then(resource => this.search(resource))
-        .catch(error => console.error(`Fetch Error =\n`, error));
+        let ghostAPI = new GhostContentAPI({
+            host: this.host,
+            key: this.key,
+            version: this.version
+        });
 
+        let browse = {}
+        let parameters = this.api.parameters;
+
+        for (var key in parameters) {
+            if(parameters[key] != ''){
+                browse[key] = parameters[key]
+            }
+        }
+
+        browse.limit = 'all';
+
+        ghostAPI[this.api.resource]
+            .browse(browse)
+            .then((data) => {
+                this.search(data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     createElementFromHTML(htmlString) {
         var div = document.createElement('div');
         div.innerHTML = htmlString.trim();
         return div.firstChild; 
-    }
-
-    cleanup(input) {
-        return input.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-");
     }
 
     displayResults(data){
@@ -131,9 +136,7 @@ class GhostSearch {
 
     }
 
-    search(resource){
-
-        let data = resource[this.api.resource];
+    search(data){
 
         this.on.afterFetch(data);
         this.check = true;
@@ -164,15 +167,7 @@ class GhostSearch {
 
     }
 
-    checkGhostAPI(){
-        if (typeof ghost === 'undefined') {
-            console.log('Ghost API is not enabled');
-            return false;
-        };
-        return true;
-    }
-
-    checkElements(){
+    checkArgs(){
         if(!document.querySelectorAll(this.input).length){
             console.log('Input not found.');
             return false;
@@ -187,58 +182,21 @@ class GhostSearch {
                 return false;
             };
         }
-        return true;
-    }
-
-    checkFields(){
-
-        let validFields = [];
-
-        if (this.api.resource == 'posts') {
-            validFields = ['amp', 'authors', 'codeinjection_foot', 'codeinjection_head', 'comment_id', 'created_at', 'created_by', 'custom_excerpt', 'custom_template', 'feature_image', 'featured', 'html', 'id', 'locale', 'meta_description', 'meta_title', 'mobiledoc', 'og_description', 'og_image', 'og_title', 'page', 'plaintext', 'primary_author', 'primary_tag', 'published_at', 'published_by', 'slug', 'status', 'tags', 'title', 'twitter_description', 'twitter_image', 'twitter_title', 'updated_at', 'updated_by', 'url', 'uuid', 'visibility'];
-        }else if(this.api.resource == 'tags'){
-            validFields = ['count', 'created_at', 'created_by', 'description', 'feature_image', 'id', 'meta_description', 'meta_title', 'name', 'parent', 'slug', 'updated_at', 'updated_by', 'visibility']
-        }else if(this.api.resource == 'users'){
-            validFields = ['accessibility', 'bio', 'count', 'cover_image', 'facebook', 'id', 'locale', 'location', 'meta_description', 'meta_title', 'name', 'profile_image', 'slug', 'tour', 'twitter', 'visibility', 'website']
-        }
-
-        for (let i = 0; i < this.api.parameters.fields.length; i++) {
-            if (!validFields.includes(this.api.parameters.fields[i])) {
-                console.log('\'' + this.api.parameters.fields[i] + '\' is not a valid field for ' + this.api.resource + '. Valid fields for ' + this.api.resource + ': [\'' + validFields.join('\', \'') + '\']');
-            }
-        }
-
-    }
-
-    checkFormats(){
-        if (this.api.resource == 'posts' && (this.api.parameters.fields && typeof this.api.parameters.fields === 'object' && this.api.parameters.fields.constructor === Array)) {
-            for (let i = 0; i < this.api.parameters.fields.length; i++) {
-                if (
-                    !this.api.parameters.formats.includes(this.api.parameters.fields[i]) && this.api.parameters.fields[i].match( /(plaintext|mobiledoc|amp)/ ) || 
-                    (this.api.parameters.fields[i] == 'html' && this.api.parameters.formats.length > 0 && !this.api.parameters.formats.includes('html'))
-                ) {
-                    console.log(this.api.parameters.fields[i] + ' is not included in the formats parameter.');
-                }
-            }
-        }
-    }
-
-    checkKeys(){
-        if (!this.options.keys.every(elem => this.api.parameters.fields.indexOf(elem) > -1)) {
-            console.log('Not all keys are in fields. Please add them.');
+        if(this.host == ''){
+            console.log('Content API Client Library host missing. Please set the host. Must not end in a trailing slash.');
+            return false;
         };
+        if(this.key == ''){
+            console.log('Content API Client Library key missing. Please set the key. Hex string copied from the "Integrations" screen in Ghost Admin.');
+            return false;
+        };
+        return true;
     }
 
     validate(){
 
-        if (!this.checkGhostAPI() || !this.checkElements()) {
+        if (!this.checkArgs()) {
             return false;
-        };
-
-        if (this.development) {
-            this.checkFields();
-            this.checkFormats();
-            this.checkKeys();
         };
 
         return true;
