@@ -89,8 +89,6 @@ class GhostSearch {
             }
         }
 
-        browse.limit = 'all';
-
         ghostAPI[this.api.resource]
             .browse(browse)
             .then((data) => {

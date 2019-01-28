@@ -1,9 +1,9 @@
 /**
- * ghost-search 1.0.0 (https://github.com/HauntedThemes/ghost-search)
+ * ghost-search 1.0.1 (https://github.com/HauntedThemes/ghost-search)
  * A simple but powerful search library for Ghost Blogging Platform.
  * Copyright 2019 Haunted Themes (https://www.hauntedthemes.com)
  * Released under MIT License
- * Released on: 21 Jan 2019
+ * Released on: 28 Jan 2019
  */
 
 /*
@@ -715,7 +715,6 @@ function () {
         }
       }
 
-      browse.limit = 'all';
       ghostAPI[this.api.resource].browse(browse).then(function (data) {
         _this2.search(data);
       }).catch(function (err) {

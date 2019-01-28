@@ -1,5 +1,4 @@
-[![Dependency Status](https://david-dm.org/HauntedThemes/ghost-search/status.svg)](https://david-dm.org/HauntedThemes/ghost-search)
-[![devDependency Status](https://david-dm.org/HauntedThemes/ghost-search/dev-status.svg)](https://david-dm.org/HauntedThemes/ghost-search?type=dev)
+[![Min Ghost Version](https://img.shields.io/badge/Min%20Ghost%20v.-%3E%3D%202.10.0-blue.svg)](https://github.com/TryGhost/Ghost)
 [![npm version](https://badge.fury.io/js/ghost-search.svg)](https://www.npmjs.com/package/ghost-search)
 
 # ghost-search
@@ -60,7 +59,7 @@ Get the admin domain. This will be different in some cases. [More details](https
 ## Use ghost-search from CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ghost-search@1.0.0/dist/ghost-search.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ghost-search@1.0.1/dist/ghost-search.min.js"></script>
 ```
 
 ## npm
@@ -324,10 +323,10 @@ Default value:
 
 ### api
 
-The api parameter is an object that supports most of the [resources](https://api.ghost.org/docs/post) and [parameters](https://api.ghost.org/docs/limit) by [Ghost API](https://api.ghost.org).
+The api parameter is an object that supports most of the [resources](https://docs.ghost.org/api/content/#resources) and [parameters](https://docs.ghost.org/api/content/#parameters) by [Content API](https://docs.ghost.org/api/content/).
 
-Resources: [posts](https://api.ghost.org/docs/post), [tags](https://api.ghost.org/docs/tag), [users](https://api.ghost.org/docs/user) \
-Parameters: [fields](https://api.ghost.org/docs/fields), [filter](https://api.ghost.org/docs/filter), [include](https://api.ghost.org/docs/include), [order](https://api.ghost.org/docs/order), [formats](https://api.ghost.org/docs/formats), [limit](https://api.ghost.org/docs/limit)
+Resources: [posts](https://docs.ghost.org/api/content/#posts), [tags](https://docs.ghost.org/api/content/#tags), [authors](https://docs.ghost.org/api/content/#authors) \
+Parameters: [fields](https://docs.ghost.org/api/content/#fields), [filter](https://docs.ghost.org/api/content/#filter), [include](https://docs.ghost.org/api/content/#include), [order](https://docs.ghost.org/api/content/#order), [formats](https://docs.ghost.org/api/content/#formats), [limit](https://docs.ghost.org/api/content/#limit)
 
 Examples:
 
@@ -437,6 +436,9 @@ All changes should be committed to `src/` files only.
 If you have a lot of posts and set `trigger` to `load` you might get a DDOS effect because you are loading all the post everything a page loads. It would be better to just set `trigger` to `focus`.
 
 ## Changelog
+
+### 1.0.1 - 28 Jan 2019
+* Editable limit parameter. [5](https://github.com/HauntedThemes/ghost-search/issues/5)
 
 ### 1.0.0 - 21 Jan 2019
 * Public API (deprecated) will not work anymore. The library is accessing Content API.
