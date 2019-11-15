@@ -442,6 +442,9 @@ If you have a lot of posts and set `trigger` to `load` you might get a DDOS effe
 
 ## Changelog
 
+### 1.1.0 - 15 Nov 2019
+* Migrated to Ghost v3
+
 ### 1.0.1 - 28 Jan 2019
 * Editable limit parameter. [5](https://github.com/HauntedThemes/ghost-search/issues/5)
 
