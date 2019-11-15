@@ -10,7 +10,7 @@ class GhostSearch {
         this.check = false;
 
         const defaults = {
-            host: '',
+            url: '',
             key: '',
             version: 'v3',
             input: '#ghost-search-field',
@@ -18,7 +18,7 @@ class GhostSearch {
             button: '',
             defaultValue: '',
             template: function(result) {
-                let url = [location.protocol, '//', location.host].join('');
+                let url = [location.protocol, '//', location.url].join('');
                 return '<a href="' + url + '/' + result.slug + '/">' + result.title + '</a>';  
             },
             trigger: 'focus',
@@ -75,7 +75,7 @@ class GhostSearch {
         this.on.beforeFetch();
 
         let ghostAPI = new GhostContentAPI({
-            host: this.host,
+            url: this.url,
             key: this.key,
             version: this.version
         });
@@ -180,7 +180,7 @@ class GhostSearch {
                 return false;
             };
         }
-        if(this.host == ''){
+        if(this.url == ''){
             console.log('Content API Client Library host missing. Please set the host. Must not end in a trailing slash.');
             return false;
         };
