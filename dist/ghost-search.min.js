@@ -1,5 +1,5 @@
 /**
- * ghost-search 1.0.1 (https://github.com/HauntedThemes/ghost-search)
+ * ghost-search 1.1.0 (https://github.com/HauntedThemes/ghost-search)
  * A simple but powerful search library for Ghost Blogging Platform.
  * Copyright 2019 Haunted Themes (https://www.hauntedthemes.com)
  * Released under MIT License
