@@ -11,6 +11,10 @@ A simple but powerful search library for [Ghost Blogging Platform](https://ghost
 
 Get the [latest version](https://unpkg.com/@tryghost/content-api) of Ghost Content API Client Library from unpkg.com.
 
+```js
+<script src="https://unpkg.com/@tryghost/content-api@{version}/umd/content-api.min.js"></script>
+```
+
 Add the script before the `{{ghost_foot}}` tag. This will, most likely, be in `default.hbs`.
 
 ### Step 2 - Setup ghost-search
