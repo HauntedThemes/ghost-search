@@ -12,7 +12,7 @@ class GhostSearch {
         const defaults = {
             host: '',
             key: '',
-            version: 'v2',
+            version: 'v3',
             input: '#ghost-search-field',
             results: '#ghost-search-results',
             button: '',

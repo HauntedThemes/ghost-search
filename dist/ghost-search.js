@@ -3,7 +3,7 @@
  * A simple but powerful search library for Ghost Blogging Platform.
  * Copyright 2019 Haunted Themes (https://www.hauntedthemes.com)
  * Released under MIT License
- * Released on: 28 Jan 2019
+ * Released on: 15 Nov 2019
  */
 
 /*
@@ -636,7 +636,7 @@ function () {
     var defaults = {
       host: '',
       key: '',
-      version: 'v2',
+      version: 'v3',
       input: '#ghost-search-field',
       results: '#ghost-search-results',
       button: '',
@@ -717,7 +717,7 @@ function () {
 
       ghostAPI[this.api.resource].browse(browse).then(function (data) {
         _this2.search(data);
-      }).catch(function (err) {
+      })["catch"](function (err) {
         console.error(err);
       });
     }
