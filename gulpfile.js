@@ -6,7 +6,7 @@ const resolveDependencies = require('gulp-resolve-dependencies');
 const concat = require('gulp-concat');
 const headerComment = require('gulp-header-comment');
 
-gulp.task('scripts', () =>
+function scripts(done) {
     gulp.src('src/ghost-search.js')
         .pipe(babel({
             presets: ['@babel/env']
@@ -31,10 +31,13 @@ gulp.task('scripts', () =>
         `))
         .pipe(sourcemaps.write('/'))
         .pipe(gulp.dest('dist'))
-);
+        done();
+};
 
-gulp.task('watch', () =>
-	gulp.watch('src/*.js', ['scripts'])
-);
+function watch(done) {
+    gulp.watch('src/*.js', gulp.series('scripts'));
+    done();  
+};
 
-gulp.task('default', ['scripts', 'watch']);
+exports.scripts= gulp.series(scripts);
+exports.default = gulp.series(watch);
