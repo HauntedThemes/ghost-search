@@ -18,8 +18,7 @@ class GhostSearch {
             button: '',
             defaultValue: '',
             template: function(result) {
-                let url = [location.protocol, '//', location.url].join('');
-                return '<a href="' + url + '/' + result.slug + '/">' + result.title + '</a>';  
+                return '<a href="/' + result.slug + '/">' + result.title + '</a>';  
             },
             trigger: 'focus',
             options: {
